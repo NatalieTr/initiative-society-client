@@ -1,0 +1,34 @@
+.menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu > p {
+  font-weight: 700;
+  font-size: 25px;
+}
+
+.menu_img {
+  margin: 20px;
+  display: block;
+  width: 80px; /* Width of new image */
+  height: 80px; /* Height of new image */
+}
+
+.menu_img.map {
+  background: url(../assets/img/worldwide.svg) no-repeat;
+}
+
+.menu_img.cabinet {
+  background: url(../assets/img/house.svg) no-repeat;
+}
+
+.menu_img.info {
+  background: url(../assets/img/letter-i.svg) no-repeat;
+}
+
+.menu_img.myInitiatives {
+  background: url(../assets/img/tasks.svg) no-repeat;
+}

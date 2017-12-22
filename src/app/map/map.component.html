@@ -1,3 +1,3 @@
-<agm-map [latitude]="lat" [longitude]="lng">
-  <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+<agm-map (mapClick)="placeMarker($event)" [latitude]="lat" [longitude]="lng">
+   <agm-marker *ngFor="let m of markers" [latitude]="m.lat" [longitude]="m.lng"></agm-marker>
 </agm-map>

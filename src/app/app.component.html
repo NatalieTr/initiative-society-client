@@ -1,13 +1,22 @@
-<router-outlet></router-outlet>
+<div class="template template_map">
+  <router-outlet></router-outlet>
+</div>
 
 <div class="menu">
-  <div class="menu_img map" routerLink=""></div>
-  <p>Map<p>
-  <div class="menu_img cabinet" routerLink="cabinet"></div>
-  <p>Home<p>
-  <div class="menu_img myInitiatives" routerLink="my-initiatives"></div>
-  <p>My initiatives<p>
-  <div class="menu_img info" routerLink="info"></div>
-  <p>About<p>
-</p>
-
+  <div class="wrap" routerLink="">
+    <div class="menu_img map"></div>
+    <p>Map</p>
+  </div>
+  <div class="wrap" routerLink="cabinet">
+    <div class="menu_img cabinet"></div>
+    <p>Home<p>
+  </div>
+  <div class="wrap" routerLink="my-initiatives">
+    <div class="menu_img myInitiatives"></div>
+    <p>My initiatives<p>
+  </div>
+  <div class="wrap" routerLink="info">
+    <div class="menu_img info"></div>
+    <p>About</p>
+  </div>
+</div>

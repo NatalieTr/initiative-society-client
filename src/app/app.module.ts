@@ -10,6 +10,8 @@ import { AgmCoreModule } from '@agm/core';
 import { MyInitiativesComponent } from './my-initiatives/my-initiatives.component';
 import { CabinetComponent } from './cabinet/cabinet.component';
 import { InfoComponent } from './info/info.component';
+import { DataService } from './data.service';
+import { InitiativesService } from './initiatives.service';
 
 
 @NgModule({
@@ -27,7 +29,7 @@ import { InfoComponent } from './info/info.component';
       apiKey: 'AIzaSyDc0wCrgs4VNTDP2w8clFGNUmcHTmLOa6U'
     })
   ],
-  providers: [],
+  providers: [DataService, InitiativesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

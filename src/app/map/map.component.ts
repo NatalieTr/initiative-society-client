@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { DataService } from '../data.service';
+import { InitiativesService } from '../initiatives.service';
 
 @Component({
   selector: 'app-map',
@@ -13,11 +14,30 @@ export class MapComponent implements OnInit {
   title = 'Map for initiatives';
   lat = 50.431782;
   lng = 30.516382;
+  zoom = 4;
+  currentLocation: Object;
+  constructor(private route: ActivatedRoute, private router: Router, private _userData: DataService, private _initiativeService: InitiativesService) { }
 
-  constructor(private route: ActivatedRoute, private router: Router, private _userData: DataService) { }
+  ngOnInit() {
+    this._initiativeService.windowLoaded();
+    //set current position
+    this.setCurrentPosition();
+  }
 
-  ngOnInit() {}
-
+  private setCurrentPosition() {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.lat = position.coords.latitude;
+        this.lng = position.coords.longitude;
+        this.zoom = 12;
+        this.currLoc.push({
+          lat: this.lat,
+          lng: this.lng,
+          draggable: false,
+        });
+      }
+    }
+  }
 
   placeMarker($event) {
     console.log($event.coords);
@@ -27,15 +47,12 @@ export class MapComponent implements OnInit {
       draggable: false
     });
 
+
     this._userData.setUserData({ lat: $event.coords.lat, lng: $event.coords.lng });
 
     setTimeout(() => {
       this.router.navigate(['my-initiatives']);
     }, 1000 * 2);
-    // this.markers.push({
-    //   lat: $event.coords.lat,
-    //   lng: $event.coords.lng
-    // });
 
   }
 
@@ -58,10 +75,19 @@ export class MapComponent implements OnInit {
       label: 'C',
       draggable: true
     }
-  ];
+  ]
+
+  currLoc: currentLocationMarker[] = [];
 }
 
 interface marker {
+  lat: number;
+  lng: number;
+  label?: string;
+  draggable: boolean;
+}
+
+interface currentLocationMarker {
   lat: number;
   lng: number;
   label?: string;

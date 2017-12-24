@@ -19,10 +19,9 @@ export class MapComponent implements OnInit {
   visitMyInitiativesFlag: boolean;
 
   constructor(private route: ActivatedRoute, private router: Router, private _userData: DataService, private _initiativeService: InitiativesService) {
-  }
+}
 
   ngOnInit() {
-    this._initiativeService.windowLoaded();
     //set current position
     this.setCurrentPosition();
     this.visitMyInitiativesFlag = this._userData.getVisitMyInitiatives();

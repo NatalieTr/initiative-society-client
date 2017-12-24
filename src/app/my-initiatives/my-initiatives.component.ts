@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { DataService } from '../data.service';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {DataService} from '../data.service';
+import {Router} from '@angular/router';
 import * as sha1 from 'sha1';
+import {InitiativesService} from '../initiatives.service';
 
 @Component({
   selector: 'app-my-initiatives',
@@ -13,15 +14,25 @@ export class MyInitiativesComponent implements OnInit {
   description: string;
   coordinates: number [];
   acceptance: number; // 1..100% (as 0..100) % of votes for this initiative to be accepted
-  a: string;
+  titleHash: string;
+  descriptionHash: string;
+  latitudeHash: string;
+  longitudeHash: string;
+  contentHash: string;
+  convertContentHash: string;
 
   locationData: any;
+  hex: string;
+  str: string;
+  num = 0;
+  i: number;
 
-  constructor(private _userData: DataService, private router: Router) { }
+  constructor(private _userData: DataService, private router: Router, private _initiativeService: InitiativesService) {
+  }
 
   ngOnInit() {
-   this._userData.setVisitMyInitiatives(true);
-   this.getCoordinates();
+    this._userData.setVisitMyInitiatives(true);
+    this.getCoordinates();
   }
 
   getCoordinates() {
@@ -37,7 +48,7 @@ export class MyInitiativesComponent implements OnInit {
 
   chooseLocation() {
     console.log(this.title, this.description);
-    if ( this.title !== undefined && this.description !== undefined) {
+    if (this.title !== undefined && this.description !== undefined) {
       localStorage.setItem('initiativeTitle', this.title);
       localStorage.setItem('initiativeDesc', this.description);
     }
@@ -46,10 +57,32 @@ export class MyInitiativesComponent implements OnInit {
 
   createInitiative() {
     console.log('Add initiative');
-    console.log(this.acceptance);
-    // this.a = sha1('message');
-    // console.log(this.a);
-    // delete local storage here
+    if (this.title && this.description && this.locationData.lat && this.locationData.lng && this.acceptance) {
+      this.titleHash = sha1(this.title);
+      this.descriptionHash = sha1(this.description);
+      this.latitudeHash = sha1(this.locationData.lat);
+      this.longitudeHash = sha1(this.locationData.lng);
+      console.log('this.titleHash', this.titleHash);
+      console.log('this.descriptionHash', this.descriptionHash);
+      console.log('this.latitudeHash', this.latitudeHash);
+      console.log('this.longitudeHash', this.longitudeHash);
+      this.contentHash = sha1(this.titleHash + this.descriptionHash + this.latitudeHash + this.longitudeHash);
+      console.log(this.contentHash);
+      // this.convertContentHash = this.hex2a(this.contentHash);
+      // console.log('After hex2a', this.convertContentHash);
+      this._initiativeService.windowLoaded();
+      this._initiativeService.createInitiative(this.contentHash, this.acceptance);
+      localStorage.clear();
+    }
   }
+
+  // hex2a(hexx) {
+  //   this.hex = hexx.toString();
+  //   this.str = '';
+  //   for (this.i = 0; this.i < this.hex.length; this.i += 2) {
+  //     this.str += String.fromCharCode(parseInt(this.hex.substr(this.i, 2), 16));
+  //   }
+  //   return this.str;
+  // }
 
 }

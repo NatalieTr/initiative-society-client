@@ -15,6 +15,10 @@ export class InitiativesService {
   account: any;
   accounts: any;
   web3: any;
+  hex: string;
+  str: string;
+  num = 0;
+  i: number;
 
   constructor() { }
 
@@ -45,7 +49,7 @@ export class InitiativesService {
     console.log("Duck 1");
     // Bootstrap the MetaCoin abstraction for Use.
     this.InitiativesContractInstance.setProvider(this.web3.currentProvider);
-    this.testMethod();
+    // this.testMethod();
 
     // Get the initial account balance so it can be displayed.
     this.web3.eth.getAccounts((err, accs) => {
@@ -64,7 +68,6 @@ export class InitiativesService {
       console.log(this.account);
       // This is run from window:load and ZoneJS is not aware of it we
       // need to use _ngZone.run() so that the UI updates on promise resolution
-      this.testMethod();
     });
   }
 
@@ -82,6 +85,52 @@ export class InitiativesService {
     }).catch(e => {
       console.log(e);
     });
+  }
+
+    createInitiative = (contentHash, acceptance) => {
+      console.log('Duck 3');
+      let initiativeInst;
+      this.InitiativesContractInstance
+        .deployed()
+        .then(instance => {
+          console.log('Instance ', instance);
+          initiativeInst = instance;
+          return initiativeInst.create(this.hex2a(contentHash), acceptance, {
+                  from: this.account
+                });
+        }).then(value => {
+        console.log(value);
+      }).catch(e => {
+        console.log(e);
+      });
+    }
+
+  getInitiativeById = (id) => {
+    console.log('Duck 4');
+    let initiativeInst;
+    this.InitiativesContractInstance
+      .deployed()
+      .then(instance => {
+        console.log('Instance ', instance);
+        initiativeInst = instance;
+        return initiativeInst.getInitiativeById(id, {
+          from: this.account
+        });
+      }).then(value => {
+      console.log(value);
+    }).catch(e => {
+      console.log(e);
+    });
+  }
+
+  hex2a(hexx) {
+    this.hex = hexx.toString();
+    this.str = '';
+    for (this.i = 0; this.i < this.hex.length; this.i += 2) {
+      this.str += String.fromCharCode(parseInt(this.hex.substr(this.i, 2), 16));
+    }
+    return this.str;
+  }
 
     // let initiativeInst;
     // this.InitiativesContractInstance
@@ -98,7 +147,6 @@ export class InitiativesService {
     //   .catch(e => {
     //     console.log(e);
     //   });
-  }
 
 
 }

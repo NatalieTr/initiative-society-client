@@ -12,8 +12,8 @@ import {InitiativesService} from '../initiatives.service';
 export class MapComponent implements OnInit {
 
   title = 'Map for initiatives';
-  lat = 50.431782;
-  lng = 30.516382;
+  lat: number
+  lng: number
   zoom = 4;
   currentLocation: Object;
   visitMyInitiativesFlag: boolean;
@@ -33,12 +33,13 @@ export class MapComponent implements OnInit {
       navigator.geolocation.getCurrentPosition((position) => {
         this.lat = position.coords.latitude;
         this.lng = position.coords.longitude;
+        console.log(position.coords.latitude, position.coords.longitude);
         this.zoom = 12;
-      });
-      this.currLoc.push({
-        lat: this.lat,
-        lng: this.lng,
-        draggable: false,
+        this.currLoc.push({
+          lat: this.lat,
+          lng: this.lng,
+          draggable: false,
+        });
       });
     }
   }

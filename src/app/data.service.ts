@@ -5,12 +5,21 @@ export class DataService {
 
   constructor() { }
 
-  sharedData: any;
-  getUserData() {
-    return this.sharedData;
+  initiativeLoc: any;
+  flagVisit: boolean;
+
+  getInitiativeLocation() {
+    return this.initiativeLoc;
   }
-  setUserData(data: any) {
-    this.sharedData = data;
+  setInitiativeLocation(data: any) {
+    this.initiativeLoc = data;
+  }
+
+  getVisitMyInitiatives() {
+    return this.flagVisit;
+  }
+  setVisitMyInitiatives(data: boolean) {
+    this.flagVisit = data;
   }
 
 }

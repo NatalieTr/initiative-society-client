@@ -12,6 +12,7 @@ import { CabinetComponent } from './cabinet/cabinet.component';
 import { InfoComponent } from './info/info.component';
 import { DataService } from './data.service';
 import { InitiativesService } from './initiatives.service';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { InitiativesService } from './initiatives.service';
     AppRoutingModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDc0wCrgs4VNTDP2w8clFGNUmcHTmLOa6U'
-    })
+    }),
+    FormsModule,
   ],
   providers: [DataService, InitiativesService],
   bootstrap: [AppComponent]

@@ -4,6 +4,7 @@ import { MapComponent } from './map/map.component';
 import { InfoComponent } from './info/info.component';
 import { MyInitiativesComponent } from './my-initiatives/my-initiatives.component';
 import { CabinetComponent } from './cabinet/cabinet.component';
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {
@@ -25,7 +26,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes), FormsModule,],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

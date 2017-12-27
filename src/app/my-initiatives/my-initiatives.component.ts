@@ -3,6 +3,7 @@ import {DataService} from '../data.service';
 import {Router} from '@angular/router';
 import * as sha1 from 'sha1';
 import {InitiativesService} from '../initiatives.service';
+import { Toast } from "toaster-js";
 
 @Component({
   selector: 'app-my-initiatives',
@@ -55,7 +56,7 @@ export class MyInitiativesComponent implements OnInit {
     this.router.navigate(['']);
   }
 
-  createInitiative() {
+  async createInitiative() {
     console.log('Add initiative');
     if (this.title && this.description && this.locationData.lat && this.locationData.lng && this.acceptance) {
       this.titleHash = sha1(this.title);
@@ -70,8 +71,8 @@ export class MyInitiativesComponent implements OnInit {
       console.log(this.contentHash);
       // this.convertContentHash = this.hex2a(this.contentHash);
       // console.log('After hex2a', this.convertContentHash);
-      this._initiativeService.windowLoaded();
-      this._initiativeService.createInitiative(this.contentHash, this.acceptance);
+      const id = await this._initiativeService.createInitiative(this.contentHash, this.acceptance);
+      new Toast(`TEST: Initiative created with ID=${ id }`, Toast.TYPE_DONE);
       localStorage.clear();
     }
   }

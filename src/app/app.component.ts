@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { InitiativesService } from "./initiatives.service";
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'app';
+
+  title = 'Initiative Society';
+
+  constructor (private initiativesService: InitiativesService) {
+    initiativesService.init().then();
+    console.log('InitiativesService for testing:', initiativesService);
+  }
+
 }

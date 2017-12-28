@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Toast } from "toaster-js";
-const { hex2a, decodeGetInitiativeById } = require("../../../global/utils");
+const { hex2a, decodeGetInitiativeById } = require("../../../global/utils.js");
+const { web3ProviderHost, web3ProviderPort } = require("../../../global/const.js");
 const InitiativesContract = require('../../../ethereum/build/contracts/Initiatives.json');
 const Web3 = require('web3');
 const truffleContract = require('truffle-contract');
-const serverUrl = 'http://127.0.0.1:9545';
+const serverUrl = `http://${ web3ProviderHost }:${ web3ProviderPort }`;
 
 declare var window: any;
 

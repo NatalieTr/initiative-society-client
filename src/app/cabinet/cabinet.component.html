@@ -1,3 +1,12 @@
-<p>
-  User cabinet
-</p>
+<div class="accounts">
+  <p>
+    Choose your wallet:
+  </p>
+  <select [(ngModel)]="wallet"
+          (change)="onWalletSet()">
+    <option *ngFor="let wallet of wallets" value="{{wallet}}">{{wallet.slice(0, 15)}}</option>
+  </select>
+  <div>
+    Currently selected wallet address: <span>{{ wallet }}</span>
+  </div>
+</div>

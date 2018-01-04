@@ -16,13 +16,17 @@ export class InitiativesService {
   initiatives = null;
   initialized = false;
 
-  account: any;
   accounts: any;
+  selectedWallet: string;
   web3: any;
   hex: string;
   str: string;
   num = 0;
   i: number;
+
+  setSelectedWallet (wallet) {
+    this.selectedWallet = wallet;
+  }
 
   async init () {
     this.initializeWeb3();
@@ -41,7 +45,7 @@ export class InitiativesService {
 
   async ready () {
     while (!this.initialized) { // sleep until ready
-      await new Promise((resolve) => setTimeout(resolve(),100));
+      await new Promise((resolve) => setTimeout(resolve, 100));
     }
     return true;
   }
@@ -92,10 +96,18 @@ export class InitiativesService {
       );
       return;
     } else {
-      this.account = this.accounts[0];
+      this.selectedWallet = this.accounts[0];
     }
 
   };
+
+  async getAllAccounts() {
+
+    await this.ready();
+
+    console.log("this.accounts", this.accounts);
+    return this.accounts;
+  }
 
   async createInitiative (contentHash: String, acceptance: Number): Promise<Number> {
 
@@ -105,7 +117,7 @@ export class InitiativesService {
 
     try {
       id = (await this.initiatives.create(hex2a(contentHash), acceptance, {
-        from: this.account
+        from: this.selectedWallet
       })).logs[0].args.id;
     } catch (e) {
       new Toast("Unable to create initiative: " + e, Toast.TYPE_ERROR);
@@ -125,7 +137,7 @@ export class InitiativesService {
 
     try {
       return decodeGetInitiativeById(await this.initiatives.getInitiativeById(id, {
-        from: this.account
+        from: this.selectedWallet
       }));
     } catch (e) {
       new Toast(`Error when getting initiative: ${ e }`, Toast.TYPE_ERROR);

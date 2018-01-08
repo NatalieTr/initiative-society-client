@@ -3,7 +3,22 @@
   position: relative;
   margin: 12px;
 
-  img {
+  .clear {
+    clear: both;
+  }
+
+  .backers {
+    font-family: monospace;
+  }
+
+  img { // why this doesn't apply?
+
+    max-height: 40%;s
+    max-width: 100%;
+
+  }
+
+  img:first-child {
 
     max-width: 20%;
     float: left;
@@ -17,7 +32,5 @@
     }
 
   }
-
-
 
 }

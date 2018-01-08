@@ -13,9 +13,14 @@ export class InitiativeComponent implements OnInit {
   id: number;
   initiative: any = {};
   private sub: any;
+  Math: any;
 
   constructor (private _initiativeService: InitiativesService, private route: ActivatedRoute) {
+    this.Math = Math;
+  }
 
+  toEth (wei) {
+    return Math.round((wei || 0) / Math.pow(10, 15)) / 1000;
   }
 
   ngOnInit () {

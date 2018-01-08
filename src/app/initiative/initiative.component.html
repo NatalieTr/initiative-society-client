@@ -1,5 +1,14 @@
 <div class="initiative-page">
   <img *ngIf="initiative.image" src="{{ initiative.image }}"/>
   <h1>{{ initiative.title || "Loading..." }}</h1>
+  <div>
+    Total funds collected: <b>{{ toEth(initiative.totalFunds || 0) }} ETH</b></div>
   <p [innerHTML]="initiative.description"></p>
+  <hr class="clear"/>
+  <h3>Backers:</h3>
+  <ul class="backers">
+    <li *ngFor="let backer of initiative.backers; let i = index">
+      {{ backer }} <b>{{ toEth(initiative.funds[backer] || 0) }} ETH</b>
+    </li>
+  </ul>
 </div>

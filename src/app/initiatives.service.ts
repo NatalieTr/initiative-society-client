@@ -9,12 +9,22 @@ const serverUrl = `http://${ web3ProviderHost }:${ web3ProviderPort }`;
 
 declare var window: any;
 
+const POLLING_INTERVAL = 500;
+async function pollWeb3ForAccounts (initiativesService: InitiativesService) {
+  const accs = (await initiativesService.web3.eth.getAccounts()) || [];
+  if (accs.indexOf(initiativesService.selectedWallet) === -1 && accs.length > 0) {
+    console.log("CHANGE", accs.slice(), initiativesService.selectedWallet);
+    initiativesService.setSelectedWallet(accs[0], true);
+  }
+}
+
 @Injectable()
 export class InitiativesService {
 
   contractDefinition = truffleContract(InitiativesContract);
   initiatives = null;
   initialized = false;
+  walletSelectCallbacks = [];
 
   accounts: any;
   selectedWallet: string;
@@ -24,8 +34,26 @@ export class InitiativesService {
   num = 0;
   i: number;
 
-  setSelectedWallet (wallet) {
+  async setSelectedWallet (wallet: string, resetAccounts: boolean = false) {
+    if (wallet === this.selectedWallet)
+      return;
     this.selectedWallet = wallet;
+    if (resetAccounts)
+      this.accounts = await this.web3.eth.getAccounts();
+    this.walletSelectCallbacks.forEach(cb => cb(this.selectedWallet));
+  }
+
+  async onWalletSelect (cb): Promise<void> {
+    await this.ready();
+    this.walletSelectCallbacks.push(cb);
+    cb(this.selectedWallet);
+  }
+
+  releaseWalletSelect (cb) {
+    const index = this.walletSelectCallbacks.indexOf(cb);
+    if (index === -1)
+      return;
+    this.walletSelectCallbacks.splice(index, 1);
   }
 
   async init () {
@@ -41,6 +69,7 @@ export class InitiativesService {
       );
     }
     this.initialized = true;
+    setInterval(() => pollWeb3ForAccounts(this), POLLING_INTERVAL);
   }
 
   async ready () {
@@ -96,7 +125,7 @@ export class InitiativesService {
       );
       return;
     } else {
-      this.selectedWallet = this.accounts[0];
+      this.setSelectedWallet(this.accounts[0]);
     }
 
   };
@@ -105,8 +134,8 @@ export class InitiativesService {
 
     await this.ready();
 
-    console.log("this.accounts", this.accounts);
-    return this.accounts;
+    return this.accounts = await this.web3.eth.getAccounts();
+
   }
 
   async createInitiative (contentHash: String, acceptance: Number): Promise<Number> {

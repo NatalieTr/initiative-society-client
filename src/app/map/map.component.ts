@@ -12,14 +12,20 @@ import {InitiativesService} from '../initiatives.service';
 export class MapComponent implements OnInit {
 
   title = 'Map for initiatives';
-  lat: number
-  lng: number
+  lat: number;
+  lng: number;
   zoom = 4;
   currentLocation: Object;
   visitMyInitiativesFlag: boolean;
 
-  constructor(private route: ActivatedRoute, private router: Router, private _userData: DataService, private _initiativeService: InitiativesService) {
-}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private _userData: DataService,
+    private _initiativeService: InitiativesService
+  ) {
+
+  }
 
   ngOnInit() {
     //set current position

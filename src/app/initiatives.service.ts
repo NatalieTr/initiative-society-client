@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Toast } from "toaster-js";
+import { graphQlGet } from "./utils";
 const { hex2a, decodeGetInitiativeById } = require("../../../global/utils.js");
 const { web3ProviderHost, web3ProviderPort } = require("../../../global/const.js");
 const InitiativesContract = require('../../../ethereum/build/contracts/Initiatives.json');
@@ -162,16 +163,67 @@ export class InitiativesService {
   // data from Blockchain.
   async getInitiativeById (id: Number) {
 
-    await this.ready();
+    let initiativeObj;
+    let query = `{
+      getContent(id: ${ id }) 
+      {
+        title, 
+        description,
+        latitude,
+        longitude
+      }
+    }`;
 
+    await this.ready();
     try {
-      return decodeGetInitiativeById(await this.initiatives.getInitiativeById(id, {
+      initiativeObj = decodeGetInitiativeById(await this.initiatives.getInitiativeById(id, {
         from: this.selectedWallet
       }));
     } catch (e) {
       new Toast(`Error when getting initiative: ${ e }`, Toast.TYPE_ERROR);
     }
 
+    try {
+      Object.assign(initiativeObj, (await graphQlGet(query)).data.getContent);
+    } catch (e) {
+      new Toast(`Error when getting initiative by id: ${ e }`, Toast.TYPE_ERROR);
+    };
+
+    return initiativeObj;
+
   }
+
+  async getOpenedInitiativesIds () {
+
+    await this.ready();
+
+    let openedInitiatives: number[];
+
+    try {
+      openedInitiatives = (await this.initiatives.getOpenedInitiativesIds());
+    } catch (e) {
+      new Toast("Unable to display all opened initiatives: " + e, Toast.TYPE_ERROR);
+    }
+
+    return openedInitiatives;
+    
+  }
+
+  async getAllInitiatives () {
+
+    await this.ready();
+
+    const ids = await this.getOpenedInitiativesIds();
+    try {
+      return await Promise.all(ids.map((id) => {
+        return this.getInitiativeById(id);
+      }));
+    } catch (e) {
+      new Toast(`Unable to get all initiatives ${ e }`, Toast.TYPE_ERROR);
+    }
+
+  }
+
+  
 
 }

@@ -8,13 +8,17 @@ import {InitiativesService} from '../initiatives.service';
 })
 export class CabinetComponent implements OnInit {
 
-  wallets: string[];
+  wallets: string[] = [];
   wallet: string;
+  balances: number[] = [];
   walletSetCallback;
+  Math: any;
 
   constructor (private _initiativeService: InitiativesService) {
+    this.Math = Math;
     this.wallet = _initiativeService.selectedWallet;
-    this.wallets = _initiativeService.accounts;
+    this.wallets = _initiativeService.accounts || [];
+    this.refreshBalances();
   }
 
   ngOnInit () {
@@ -25,6 +29,12 @@ export class CabinetComponent implements OnInit {
     this._initiativeService.releaseWalletSelect(this.walletSetCallback);
   }
 
+  async refreshBalances () {
+    this.balances = await Promise.all(
+      this.wallets.map(address => this._initiativeService.web3.eth.getBalance(address))
+    );
+  }
+
   onWalletSet () {
     this._initiativeService.setSelectedWallet(this.wallet);
   }
@@ -33,6 +43,7 @@ export class CabinetComponent implements OnInit {
     if (wallet === this.wallet)
       return;
     this.wallets = await this._initiativeService.getAllAccounts();
+    await this.refreshBalances();
     this.wallet = wallet;
   }
 

@@ -4,9 +4,11 @@
   </p>
   <select [(ngModel)]="wallet"
           (change)="onWalletSet()">
-    <option *ngFor="let wallet of wallets" value="{{wallet}}">{{wallet.slice(0, 15)}}</option>
+    <option *ngFor="let wallet of wallets; let i = index" value="{{ wallet }}">
+      {{ wallet.slice(0, 15) }}..: {{ Math.round(balances[i] / Math.pow(10, 15)) / 1000 }} ETH
+    </option>
   </select>
-  <div>
-    Currently selected wallet address: <span>{{ wallet }}</span>
-  </div>
+  <p>
+    Currently selected wallet address: <b>{{ wallet }}</b>
+  </p>
 </div>

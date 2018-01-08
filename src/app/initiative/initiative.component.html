@@ -1,3 +1,5 @@
-<p>
-  initiative works!
-</p>
+<div class="initiative-page">
+  <img *ngIf="initiative.image" src="{{ initiative.image }}"/>
+  <h1>{{ initiative.title || "Loading..." }}</h1>
+  <p [innerHTML]="initiative.description"></p>
+</div>

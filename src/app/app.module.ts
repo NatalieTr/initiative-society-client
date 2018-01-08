@@ -13,6 +13,7 @@ import { InfoComponent } from './info/info.component';
 import { DataService } from './data.service';
 import { InitiativesService } from './initiatives.service';
 import { FormsModule } from '@angular/forms';
+import { InitiativeComponent } from './initiative/initiative.component';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { FormsModule } from '@angular/forms';
     MapComponent,
     MyInitiativesComponent,
     CabinetComponent,
-    InfoComponent
+    InfoComponent,
+    InitiativeComponent
   ],
   imports: [
     BrowserModule,

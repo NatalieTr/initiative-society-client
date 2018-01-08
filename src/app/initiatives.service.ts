@@ -167,10 +167,14 @@ export class InitiativesService {
     let query = `{
       getContent(id: ${ id }) 
       {
+        id,
         title, 
         description,
         latitude,
-        longitude
+        longitude,
+        image,
+        cover,
+        link
       }
     }`;
 

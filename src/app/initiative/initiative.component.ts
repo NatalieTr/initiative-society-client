@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {InitiativesService} from "../initiatives.service";
+import { InitiativesService } from "../initiatives.service";
 import { ActivatedRoute } from '@angular/router';
 import marked from "marked";
 
@@ -56,12 +56,12 @@ export class InitiativeComponent implements OnInit {
   }
 
   async voteForInitiative (id = 1, positive = true) {
-
+    await this._initiativeService.voteForInitiative(id, positive);
   }
 
   async fundInitiative (id = 1) {
-    const value = (<HTMLInputElement>document.getElementById("fund-amount")).value;
-
+    const value = +(<HTMLInputElement>document.getElementById("fund-amount")).value;
+    await this._initiativeService.fundInitiative(id, value);
   }
 
 }

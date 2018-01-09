@@ -61,7 +61,7 @@ export class MapComponent implements OnInit {
       this._userData.setInitiativeLocation({lat: $event.coords.lat, lng: $event.coords.lng});
 
       setTimeout(() => {
-        this.router.navigate(['my-initiatives']);
+        this.router.navigate(['new-initiative']);
       }, 1000 * 2);
     }
   }

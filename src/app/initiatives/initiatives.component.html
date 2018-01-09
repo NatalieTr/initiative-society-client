@@ -1,7 +1,7 @@
 <ul *ngFor="let initiative of allInitiatives" class="initiatives">
     <li (click)="showInitiative(initiative.id)" class="initiative">
       <img *ngIf="initiative.image" src="{{ initiative.image }}"/>
-      <div class="title">{{ initiative.title || "New Initiative" }}</div>
+      <div class="title">{{ initiative.title || "No Title" }} ({{ toEth(initiative.totalFunds) }} ETH)</div>
       <div class="desc">{{ initiative.description }}</div>
     </li>
 </ul>

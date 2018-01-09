@@ -3,6 +3,7 @@ import { InitiativesService } from "../initiatives.service";
 import { ActivatedRoute } from '@angular/router';
 import { shortenAddress } from "../utils";
 import marked from "marked";
+const { hashInitiativeContent } = require("../../../../global/utils.js");
 
 @Component({
   selector: 'app-initiative',
@@ -30,12 +31,16 @@ export class InitiativeComponent implements OnInit {
     return shortenAddress(a);
   }
 
-  countVotes (votes = [], positive = true) {
+  countVotes ({ voters, votes, funds, totalFunds }, positive = true) {
     if ((votes || []).length === 0)
       return 0;
-    return Math.round(
-      (votes || []).filter(a => positive ? a : !a).length / (votes || []).length * 100
-    ) / 100;
+    let p = 0;
+    for (let i = 0; i < votes.length; ++i) {
+      if (votes[i] === positive) {
+        p += funds[voters[i]];
+      }
+    }
+    return Math.round(p / totalFunds * 10000) / 100;
   }
 
   ngOnInit () {
@@ -44,7 +49,9 @@ export class InitiativeComponent implements OnInit {
       this.loadInitiative(this.id);
     });
     this._initiativeService.onWalletSelect(
-      this.walletCallback = wallet => this.myWallet = wallet
+      this.walletCallback = wallet => {
+        this.myWallet = wallet;
+      }
     );
   }
 
@@ -55,20 +62,32 @@ export class InitiativeComponent implements OnInit {
 
   async loadInitiative (id = 1) {
     this.initiative = await this._initiativeService.getInitiativeById(id || 1);
-    this.initiative.description = marked(this.initiative.description);
+    const hash = hashInitiativeContent(this.initiative);
+    this.initiative.description = marked(this.initiative.description || "");
     this.initiative.voting = {};
     for (let i = 0; i < this.initiative.voters.length; ++i) {
       this.initiative.voting[this.initiative.voters[i]] = this.initiative.votes[i];
     }
+    console.log(hash, this.initiative.contentHash);
+    this.initiative.verified = hash === this.initiative.contentHash;
+  }
+
+  async completeInitiative (id = 1) {
+    await this._initiativeService.completeInitiative(id);
+    await this.loadInitiative(this.id);
   }
 
   async voteForInitiative (id = 1, positive = true) {
     await this._initiativeService.voteForInitiative(id, positive);
+    await this.loadInitiative(this.id);
   }
 
   async fundInitiative (id = 1) {
-    const value = +(<HTMLInputElement>document.getElementById("fund-amount")).value;
+    const value = +(<HTMLInputElement>document.getElementById("fund-amount")).value
+      * Math.pow(10, 18);
     await this._initiativeService.fundInitiative(id, value);
+    await this.loadInitiative(this.id);
+    (<HTMLInputElement>document.getElementById("fund-amount")).value = "0";
   }
 
 }

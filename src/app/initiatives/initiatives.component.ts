@@ -20,9 +20,12 @@ export class InitiativesComponent implements OnInit {
     this.getAllInitiatives();
   }
 
+  toEth (wei) {
+    return Math.round((wei || 0) / Math.pow(10, 15)) / 1000;
+  }
+
   async getAllInitiatives() {
     this.allInitiatives = await this._initiativeService.getAllInitiatives();
-    console.log(this.allInitiatives);
   }
 
   showInitiative(id) {

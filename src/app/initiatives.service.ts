@@ -30,9 +30,6 @@ export class InitiativesService {
   accounts: any;
   selectedWallet: string;
   web3: any;
-  hex: string;
-  str: string;
-  num = 0;
   i: number;
 
   async setSelectedWallet (wallet: string, resetAccounts: boolean = false) {
@@ -219,9 +216,13 @@ export class InitiativesService {
 
     const ids = await this.getOpenedInitiativesIds();
     try {
-      return await Promise.all(ids.map((id) => {
+      const initiatives = await Promise.all(ids.map((id) => {
         return this.getInitiativeById(id);
       }));
+      for (let i = 0; i < initiatives.length; ++i) {
+        initiatives[i].id = ids[i];
+      }
+      return initiatives;
     } catch (e) {
       new Toast(`Unable to get all initiatives ${ e }`, Toast.TYPE_ERROR);
     }
@@ -235,7 +236,7 @@ export class InitiativesService {
     try {
       await this.initiatives.vote(id, positive, {
         from: this.selectedWallet,
-        gas: 30000000000
+        gas: 2900000
       });
     } catch (e) {
       new Toast("Unable to vote for initiative: " + e, Toast.TYPE_ERROR);
@@ -250,11 +251,24 @@ export class InitiativesService {
     try {
       await this.initiatives.back(id, {
         from: this.selectedWallet,
-        value: value,
-        gas: 30000000000
+        value: value
       });
     } catch (e) {
-      new Toast("Unable to vote for initiative: " + e, Toast.TYPE_ERROR);
+      new Toast("Unable to fund initiative: " + e, Toast.TYPE_ERROR);
+    }
+
+  }
+
+  async completeInitiative (id = 1) {
+
+    await this.ready();
+
+    try {
+      await this.initiatives.complete(id, {
+        from: this.selectedWallet
+      });
+    } catch (e) {
+      new Toast("Unable to complete initiative: " + e, Toast.TYPE_ERROR);
     }
 
   }

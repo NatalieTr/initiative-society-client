@@ -1,6 +1,9 @@
 <div class="initiative-page">
   <img *ngIf="initiative.image" src="{{ initiative.image }}"/>
-  <h1>{{ initiative.title || "Loading..." }}</h1>
+  <h1>{{ initiative.title || "No title" }}</h1>
+  <div>
+    Genuine: <b class="{{ initiative.verified ? 'ok' : 'red' }}">{{ (!!initiative.verified + "").toUpperCase() }}</b>
+  </div>
   <div>
     Total funds collected: <b>{{ toEth(initiative.totalFunds || 0) }} ETH</b>
   </div>
@@ -12,8 +15,16 @@
     Executed by: <b>{{ shortenAddress(initiative.executor) }}</b>
   </div>
   <div *ngIf="initiative.executor">
-    Voting: <span class="positive-votes">{{ countVotes(initiative.votes) }}%</span> /
-    <span class="negative-votes">{{ countVotes(initiative.votes, false) }}%</span>
+    Voting: <b class="positive-votes">{{ countVotes(initiative) }}%</b> /
+    <b class="negative-votes">{{ countVotes(initiative, false) }}%</b>
+    (<b>{{ (initiative.votes || []).length }}</b> vote{{ (initiative.votes || []).length > 1 ? "s" : "" }})
+  </div>
+  <div>
+    Accept threshold:
+    <b class="positive-votes">{{ initiative.acceptance }}%</b>
+  </div>
+  <div>
+    Location: <b>{{ initiative.latitude }}, {{ initiative.longitude }}</b>
   </div>
   <p [innerHTML]="initiative.description"></p>
   <hr class="clear"/>
@@ -33,12 +44,13 @@
       <input id="fund-amount" type="number" value="0" min="0"/>
       <button (click)="fundInitiative(initiative.id)">Fund Initiative</button>
     </label>
+    <button (click)="completeInitiative(initiative.id)">Mark as completed</button>
   </div>
-  <div *ngIf="initiative.executor && !initiative.closed">
-    <label *ngIf="(initiative.voting || {}).hasOwnProperty(myWallet)">
-      You have already voted: <b>{{ initiative.voting[myWallet] ? "confirm" : "decline" }}</b>
+  <div *ngIf="initiative.executor && !initiative.closed && initiative.backers.indexOf(myWallet.toLowerCase()) !== -1">
+    <label *ngIf="(initiative.voting || {}).hasOwnProperty(myWallet.toLowerCase())">
+      You have already voted: <b>{{ initiative.voting[myWallet.toLowerCase()] ? "confirm" : "decline" }}</b>
     </label>
-    <label *ngIf="!(initiative.voting || {}).hasOwnProperty(myWallet)">
+    <label *ngIf="!(initiative.voting || {}).hasOwnProperty(myWallet.toLowerCase())">
       Vote:
       <button (click)="voteForInitiative(initiative.id, true)">confirm</button>
       <button (click)="voteForInitiative(initiative.id, false)">decline</button>

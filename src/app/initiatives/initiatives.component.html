@@ -1,0 +1,6 @@
+<ul *ngFor="let initiative of allInitiatives">
+    <li (click)="showInitiative(initiative.id)">{{initiative.title}}</li>
+</ul>
+<div>
+    <button class="createBtn" (click)="createInitiative()">Create initiative</button>
+</div>

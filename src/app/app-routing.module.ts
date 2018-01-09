@@ -32,6 +32,10 @@ const routes: Routes = [
   {
     path: 'initiative/:id',
     component: InitiativeComponent
+  },
+  {
+    path: 'new-initiative',
+    component: NewInitiativeComponent
   }
 ];
 

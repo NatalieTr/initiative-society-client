@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { MapComponent } from './map/map.component';
 import { InfoComponent } from './info/info.component';
-import { MyInitiativesComponent } from './my-initiatives/my-initiatives.component';
+import { NewInitiativeComponent } from './new-initiative/new-initiative.component';
+import { InitiativesComponent } from './initiatives/initiatives.component';
 import { CabinetComponent } from './cabinet/cabinet.component';
 import { FormsModule } from '@angular/forms';
 import { InitiativeComponent } from "./initiative/initiative.component";
@@ -17,8 +18,12 @@ const routes: Routes = [
     component: InfoComponent
   },
   {
-    path: 'my-initiatives',
-    component: MyInitiativesComponent
+    path: 'initiatives',
+    component: InitiativesComponent
+  },
+  {
+    path: 'create-initiative',
+    component: NewInitiativeComponent
   },
   {
     path: 'cabinet',

@@ -7,23 +7,24 @@ import { AppComponent } from './app.component';
 import { MapComponent } from './map/map.component';
 
 import { AgmCoreModule } from '@agm/core';
-import { MyInitiativesComponent } from './my-initiatives/my-initiatives.component';
+import { InitiativesComponent } from './initiatives/initiatives.component';
 import { CabinetComponent } from './cabinet/cabinet.component';
 import { InfoComponent } from './info/info.component';
 import { DataService } from './data.service';
 import { InitiativesService } from './initiatives.service';
 import { FormsModule } from '@angular/forms';
 import { InitiativeComponent } from './initiative/initiative.component';
-
+import { NewInitiativeComponent } from './new-initiative/new-initiative.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MapComponent,
-    MyInitiativesComponent,
+    InitiativesComponent,
     CabinetComponent,
     InfoComponent,
-    InitiativeComponent
+    InitiativeComponent,
+    NewInitiativeComponent
   ],
   imports: [
     BrowserModule,

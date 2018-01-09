@@ -13,7 +13,7 @@
 
   img { // why this doesn't apply?
 
-    max-height: 40%;s
+    max-height: 40%;
     max-width: 100%;
 
   }
@@ -33,4 +33,12 @@
 
   }
 
+}
+
+.positive-votes {
+  color: green;
+}
+
+.negative-votes {
+  color: red;
 }

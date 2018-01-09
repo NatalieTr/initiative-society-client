@@ -14,8 +14,12 @@ export function graphQlGet (query): Promise<any> {
             }
         };
 
-        xhr.send();  
+        xhr.send();
 
     });
 
+}
+
+export function shortenAddress (address) {
+  return !address ? "" : (address + "").slice(0, 12) + "..";
 }

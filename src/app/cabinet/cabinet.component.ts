@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {InitiativesService} from '../initiatives.service';
+import { shortenAddress } from "../utils";
 
 @Component({
   selector: 'app-cabinet',
@@ -19,6 +20,10 @@ export class CabinetComponent implements OnInit {
     this.wallet = _initiativeService.selectedWallet;
     this.wallets = _initiativeService.accounts || [];
     this.refreshBalances();
+  }
+
+  shortenAddress (a) {
+    return shortenAddress(a);
   }
 
   ngOnInit () {

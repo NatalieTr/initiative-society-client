@@ -9,7 +9,7 @@
     <b>{{ initiative.closed ? "closed" : initiative.executor ? "judged" : "fundraising" }}</b>
   </div>
   <div *ngIf="initiative.executor">
-    Executed by: <b>{{ initiative.executor }}</b>
+    Executed by: <b>{{ shortenAddress(initiative.executor) }}</b>
   </div>
   <div *ngIf="initiative.executor">
     Voting: <span class="positive-votes">{{ countVotes(initiative.votes) }}%</span> /
@@ -20,7 +20,7 @@
   <h3>Backers:</h3>
   <ul class="backers">
     <li *ngFor="let backer of initiative.backers">
-      {{ backer }} <b>{{ toEth(initiative.funds[backer] || 0) }} ETH</b>
+      {{ shortenAddress(backer) }} <b>{{ toEth(initiative.funds[backer] || 0) }} ETH</b>
       {{
         (initiative.voting || {}).hasOwnProperty(backer)
           ? (initiative.voting[backer] ? "(confirmed)" : "(declined)")

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { InitiativesService } from "../initiatives.service";
 import { ActivatedRoute } from '@angular/router';
+import { shortenAddress } from "../utils";
 import marked from "marked";
 
 @Component({
@@ -25,10 +26,16 @@ export class InitiativeComponent implements OnInit {
     return Math.round((wei || 0) / Math.pow(10, 15)) / 1000;
   }
 
+  shortenAddress (a) {
+    return shortenAddress(a);
+  }
+
   countVotes (votes = [], positive = true) {
     if ((votes || []).length === 0)
       return 0;
-    return (votes || []).filter(a => positive ? a : !a).length / (votes || []).length;
+    return Math.round(
+      (votes || []).filter(a => positive ? a : !a).length / (votes || []).length * 100
+    ) / 100;
   }
 
   ngOnInit () {

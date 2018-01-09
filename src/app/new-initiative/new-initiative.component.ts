@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {DataService} from '../data.service';
-import {Router} from '@angular/router';
-import * as sha1 from 'sha1';
-import {InitiativesService} from '../initiatives.service';
+import { Component, OnInit } from '@angular/core';
+import { DataService } from '../data.service';
+import { Router } from '@angular/router';
+import { InitiativesService } from '../initiatives.service';
 import { Toast } from "toaster-js";
+const { hashInitiativeContent } = require('../../../../global/utils.js');
 
 @Component({
   selector: 'app-new-initiative',
@@ -28,7 +28,11 @@ export class NewInitiativeComponent implements OnInit {
   num = 0;
   i: number;
 
-  constructor(private _userData: DataService, private router: Router, private _initiativeService: InitiativesService) {
+  constructor(
+    private _userData: DataService,
+    private router: Router,
+    private _initiativeService: InitiativesService
+  ) {
   }
 
   ngOnInit() {
@@ -57,23 +61,24 @@ export class NewInitiativeComponent implements OnInit {
   }
 
   async createInitiative() {
-    console.log('Add initiative');
     if (this.title && this.description && this.locationData.lat && this.locationData.lng && this.acceptance) {
-      this.titleHash = sha1(this.title);
-      this.descriptionHash = sha1(this.description);
-      this.latitudeHash = sha1(this.locationData.lat);
-      this.longitudeHash = sha1(this.locationData.lng);
-      console.log('this.titleHash', this.titleHash);
-      console.log('this.descriptionHash', this.descriptionHash);
-      console.log('this.latitudeHash', this.latitudeHash);
-      console.log('this.longitudeHash', this.longitudeHash);
-      this.contentHash = sha1(this.titleHash + this.descriptionHash + this.latitudeHash + this.longitudeHash);
-      console.log(this.contentHash);
-      // this.convertContentHash = this.hex2a(this.contentHash);
-      // console.log('After hex2a', this.convertContentHash);
-      const id = await this._initiativeService.createInitiative(this.contentHash, this.acceptance);
-      new Toast(`TEST: Initiative created with ID=${ id }`, Toast.TYPE_DONE);
+      const initiative = {
+        title: this.title,
+        description: this.description,
+        latitude: this.locationData.lat,
+        longitude: this.locationData.lng,
+        acceptance: this.acceptance
+      };
+      const id = await this._initiativeService.createInitiative(
+        hashInitiativeContent(initiative),
+        this.acceptance,
+        initiative
+      );
+      new Toast(`Initiative created with ID=${ id }`, Toast.TYPE_DONE);
+      this.router.navigate([`initiative/${ id }`]);
       localStorage.clear();
+    } else {
+      new Toast(`Please, fill up all fields`, Toast.TYPE_ERROR);
     }
   }
 

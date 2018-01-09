@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Toast } from "toaster-js";
-import { graphQlGet } from "./utils";
+import { graphQlGet, graphQlPost } from "./utils";
 const { hex2a, decodeGetInitiativeById } = require("../../../global/utils.js");
 const { web3ProviderHost, web3ProviderPort } = require("../../../global/const.js");
 const InitiativesContract = require('../../../ethereum/build/contracts/Initiatives.json');
@@ -136,11 +136,12 @@ export class InitiativesService {
 
   }
 
-  async createInitiative (contentHash: String, acceptance: Number): Promise<Number> {
+  async createInitiative (contentHash: String, acceptance: Number, initiative): Promise<Number> {
 
     await this.ready();
 
-    let id;
+    let id,
+        ini;
 
     try {
       id = (await this.initiatives.create(hex2a(contentHash), acceptance, {
@@ -150,14 +151,30 @@ export class InitiativesService {
       new Toast("Unable to create initiative: " + e, Toast.TYPE_ERROR);
     }
 
-    // todo: contact GraphQL server and store initiative static data
+    try {
+      ini = await graphQlPost(`mutation {
+        saveContent(initiative: {
+          id: ${ id },
+          title: "${ initiative.title.replace(/"/g, '\\"') }",
+          description: "${ initiative.description.replace(/"/g, '\\"') }",
+          latitude: ${ initiative.latitude },
+          longitude: ${ initiative.longitude }
+        }) {
+          id
+        }
+      }`);
+    } catch (e) {
+      new Toast("Unable to put initiative data to GraphQL server: " + e, Toast.TYPE_ERROR);
+    }
+
+    if (ini === null) {
+      new Toast("Something went wrong", Toast.TYPE_ERROR);
+    }
 
     return id;
 
   };
 
-  // General todo: getInitiativeById should contact GraphQL server and return content as well as
-  // data from Blockchain.
   async getInitiativeById (id: Number) {
 
     let initiativeObj;

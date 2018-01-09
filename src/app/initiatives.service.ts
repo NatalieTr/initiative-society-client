@@ -191,7 +191,7 @@ export class InitiativesService {
       Object.assign(initiativeObj, (await graphQlGet(query)).data.getContent);
     } catch (e) {
       new Toast(`Error when getting initiative by id: ${ e }`, Toast.TYPE_ERROR);
-    };
+    }
 
     return initiativeObj;
 
@@ -210,7 +210,7 @@ export class InitiativesService {
     }
 
     return openedInitiatives;
-    
+
   }
 
   async getAllInitiatives () {
@@ -228,6 +228,35 @@ export class InitiativesService {
 
   }
 
-  
+  async voteForInitiative (id = 1, positive = true) {
+
+    await this.ready();
+
+    try {
+      await this.initiatives.vote(id, positive, {
+        from: this.selectedWallet,
+        gas: 30000000000
+      });
+    } catch (e) {
+      new Toast("Unable to vote for initiative: " + e, Toast.TYPE_ERROR);
+    }
+
+  }
+
+  async fundInitiative (id = 1, value = 0) {
+
+    await this.ready();
+
+    try {
+      await this.initiatives.back(id, {
+        from: this.selectedWallet,
+        value: value,
+        gas: 30000000000
+      });
+    } catch (e) {
+      new Toast("Unable to vote for initiative: " + e, Toast.TYPE_ERROR);
+    }
+
+  }
 
 }

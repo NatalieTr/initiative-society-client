@@ -17,6 +17,7 @@ export class MapComponent implements OnInit {
   zoom = 4;
   currentLocation: Object;
   visitMyInitiativesFlag: boolean;
+  allInitiatives: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -31,6 +32,7 @@ export class MapComponent implements OnInit {
     //set current position
     this.setCurrentPosition();
     this.visitMyInitiativesFlag = this._userData.getVisitMyInitiatives();
+    this.placeInitiativesOnMap();
   }
 
   private setCurrentPosition() {
@@ -38,7 +40,6 @@ export class MapComponent implements OnInit {
       navigator.geolocation.getCurrentPosition((position) => {
         this.lat = position.coords.latitude;
         this.lng = position.coords.longitude;
-        console.log(position.coords.latitude, position.coords.longitude);
         this.zoom = 12;
         this.currLoc.push({
           lat: this.lat,
@@ -49,12 +50,24 @@ export class MapComponent implements OnInit {
     }
   }
 
+  async placeInitiativesOnMap() {
+    this.allInitiatives = await this._initiativeService.getAllInitiatives();
+    this.markers = this.allInitiatives.map((initiative) => {
+      return {
+        lat: initiative.latitude,
+        lng: initiative.longitude,
+        label: initiative.title + " (" + (initiative.totalFunds/Math.pow(10,18)).toFixed(2) + ") ETH",
+        draggable: false
+      };
+    });
+  }
+
   placeMarker($event) {
-    console.log($event.coords);
     if (this.visitMyInitiativesFlag) {
       this.markers.push({
         lat: $event.coords.lat,
         lng: $event.coords.lng,
+        label: "",
         draggable: false
       });
 
@@ -66,26 +79,7 @@ export class MapComponent implements OnInit {
     }
   }
 
-  markers: marker[] = [
-    {
-      lat: 51.673858,
-      lng: 7.815982,
-      label: 'A',
-      draggable: true
-    },
-    {
-      lat: 51.373858,
-      lng: 7.215982,
-      label: 'B',
-      draggable: false
-    },
-    {
-      lat: 51.723858,
-      lng: 7.895982,
-      label: 'C',
-      draggable: true
-    }
-  ]
+  markers: marker[] = [];
 
   currLoc: currentLocationMarker[] = [];
 }
@@ -93,7 +87,7 @@ export class MapComponent implements OnInit {
 interface marker {
   lat: number;
   lng: number;
-  label?: string;
+  label: string;
   draggable: boolean;
 }
 

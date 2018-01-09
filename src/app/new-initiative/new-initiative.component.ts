@@ -77,13 +77,4 @@ export class NewInitiativeComponent implements OnInit {
     }
   }
 
-  // hex2a(hexx) {
-  //   this.hex = hexx.toString();
-  //   this.str = '';
-  //   for (this.i = 0; this.i < this.hex.length; this.i += 2) {
-  //     this.str += String.fromCharCode(parseInt(this.hex.substr(this.i, 2), 16));
-  //   }
-  //   return this.str;
-  // }
-
 }

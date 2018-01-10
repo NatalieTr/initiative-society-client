@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+const { web3ProviderHost, web3ProviderPort } = require("../../../../global/const.js");
 
 @Component({
   selector: 'app-info',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InfoComponent implements OnInit {
 
-  constructor() { }
+  rpcLocation: string = "";
+
+  constructor() {
+
+  }
 
   ngOnInit() {
+    this.rpcLocation = `${ location.protocol }//${ web3ProviderHost }:${ web3ProviderPort }`;
   }
 
 }

@@ -57,9 +57,14 @@ export class MapComponent implements OnInit {
         lat: initiative.latitude,
         lng: initiative.longitude,
         label: initiative.title + " (" + (initiative.totalFunds/Math.pow(10,18)).toFixed(2) + ") ETH",
-        draggable: false
+        draggable: false,
+        id: initiative.id
       };
     });
+  }
+
+  showInitiative(id) {
+   this.router.navigate([`initiative/${id}`]);
   }
 
   placeMarker($event) {

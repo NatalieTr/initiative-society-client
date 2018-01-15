@@ -1,4 +1,4 @@
 <agm-map (mapClick)="placeMarker($event)" [latitude]="lat" [longitude]="lng" [zoom]="12">
-   <agm-marker *ngFor="let m of markers" [latitude]="m.lat" [longitude]="m.lng" [label]="m.label"></agm-marker>
+   <agm-marker *ngFor="let m of markers" [latitude]="m.lat" [longitude]="m.lng" [label]="m.label" (markerClick)=showInitiative(m.id)></agm-marker>
   <agm-marker *ngFor="let c of currLoc" [latitude]="c.lat" [longitude]="c.lng" [iconUrl]="'../../assets/img/circle.png'"></agm-marker>
 </agm-map>

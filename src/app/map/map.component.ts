@@ -12,8 +12,8 @@ import {InitiativesService} from '../initiatives.service';
 export class MapComponent implements OnInit {
 
   title = 'Map for initiatives';
-  lat: number;
-  lng: number;
+  lat: number = 50.45475807277256; // one of the initiatives in demo
+  lng: number = 50.45475807277256;
   zoom = 4;
   currentLocation: Object;
   visitMyInitiativesFlag: boolean;

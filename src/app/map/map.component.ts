@@ -13,7 +13,7 @@ export class MapComponent implements OnInit {
 
   title = 'Map for initiatives';
   lat: number = 50.45475807277256; // one of the initiatives in demo
-  lng: number = 50.45475807277256;
+  lng: number = 30.52728295326233;
   zoom = 4;
   currentLocation: Object;
   visitMyInitiativesFlag: boolean;
